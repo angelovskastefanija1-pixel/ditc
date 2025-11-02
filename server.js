@@ -16,7 +16,11 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const OUT_DIR = path.join(__dirname, 'out');
 const STORAGE_DIR = path.join(__dirname, 'storage');
-const DATASETS_FILE = path.join(__dirname, 'data', 'datasets.json');
+const DATASETS_FILE = path.join(
+  __dirname,
+  'data',
+  process.env.RENDER ? 'datasets.render.json' : 'datasets.json'
+);
 const MANIFEST = path.join(STORAGE_DIR, 'manifest.json');
 
 app.use(express.static(PUBLIC_DIR));
