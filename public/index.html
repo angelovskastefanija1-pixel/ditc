@@ -364,11 +364,19 @@ document.getElementById('btnCsv').addEventListener('click', async ()=>{
 
 (async ()=>{
   showOverlay('Loading app…');
-  await loadDatasets();
-  currentFile = (datasets[0]?.key||'') + '.csv';
-  await refreshData();
-  hideOverlay(); // кога ќе заврши сè, сокриј го loader-от
+  try {
+    await loadDatasets();
+    currentFile = (datasets[0]?.key||'') + '.csv';
+    await refreshData();
+  } catch(e) {
+    console.error(e);
+    alert('Failed to load data.');
+  } finally {
+    hideOverlay(); // секогаш исклучи loader
+  }
 })();
+
+
 
 </script>
 <script>
@@ -414,15 +422,17 @@ window.addEventListener('load', ()=>{
   });
 
   function unlockAccess(){
-    popup.style.opacity = '0';
-    popup.style.transition = 'opacity 0.6s ease';
-    setTimeout(()=>{
-      popup.style.display = 'none';
-      document.body.style.overflow = "auto";
-      document.getElementById('overlay').style.pointerEvents = "auto";
-      alert('✅ Access granted. Welcome inside.');
-    }, 500);
-  }
+  popup.style.opacity = '0';
+  popup.style.transition = 'opacity 0.6s ease';
+  setTimeout(()=>{
+    popup.style.display = 'none';
+    document.body.style.overflow = "auto";
+    document.getElementById('overlay').style.pointerEvents = "auto";
+    overlay.classList.remove('show'); // 👈 ова е клучното
+    alert('✅ Access granted. Welcome inside.');
+  }, 500);
+}
+
 
   submitBtn.addEventListener('click', ()=>{
     const entered = passInput.value.trim();
