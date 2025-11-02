@@ -194,34 +194,37 @@ function renderStatus(results){
 
 async function loadDatasets(){
   datasets = await api('/api/datasets');
-  const sel = document.getElementById('datasetSelect'); sel.innerHTML='';
+  const sel = document.getElementById('datasetSelect');
+  sel.innerHTML = '';
   datasets.forEach(d=>{
-    const o=document.createElement('option'); o.value=d.key; o.textContent=d.label; sel.append(o);
+    const o=document.createElement('option');
+    o.value=d.key;
+    o.textContent=d.label;
+    sel.append(o);
   });
-  currentFile = (datasets[0]?.key||'') + '.csv';
+  if (datasets.length) {
+    currentFile = datasets[0].key + '.csv';
+  }
 }
 
-async function refreshData(){
-  if(!currentFile){ await loadDatasets(); }
-  const q = document.getElementById('search').value || '';
-  const data = await api(`/api/data?file=${encodeURIComponent(currentFile)}&page=${page}&pageSize=${pageSize}&q=${encodeURIComponent(q)}`);
-  headers = data.headers || [];
-window._rows = data.rows || [];
-renderColumnFilters(headers);
-renderFilteredTable();
 
-  const tb=document.getElementById('tbody'); tb.innerHTML='';
-  if((data.rows||[]).length===0){
-    const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=99; td.textContent='No rows. Click "Update Selected" first or change dataset.'; tr.append(td); tb.append(tr);
-  }else{
-    data.rows.forEach(r=>{
-      const tr=document.createElement('tr');
-      headers.forEach(h=>{
-        const td=document.createElement('td'); td.textContent = r[h]||''; tr.append(td);
-      });
-      tb.append(tr);
-    });
+async function refreshData(){
+  try {
+    if(!currentFile){ await loadDatasets(); }
+    const q = document.getElementById('search').value || '';
+    const data = await api(`/api/data?file=${encodeURIComponent(currentFile)}&q=${encodeURIComponent(q)}`);
+    headers = data.headers || [];
+    window._rows = data.rows || [];
+    renderColumnFilters(headers);
+    renderFilteredTable();
+    document.getElementById('pageInfo').textContent = `${data.totalMatched || 0} rows`;
+  } catch (err) {
+    console.error('❌ refreshData error:', err);
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="99">⚠️ Failed to load data</td></tr>`;
   }
+}
+
   const th=document.getElementById('thead'); th.innerHTML='';
   if(headers.length){ const tr=document.createElement('tr'); headers.forEach(h=>{ const thd=document.createElement('th'); thd.textContent=h; tr.append(thd); }); th.append(tr); }
   document.getElementById('pageInfo').textContent = `Page ${data.page} / ${data.totalPages} • ${data.totalMatched} rows`;
