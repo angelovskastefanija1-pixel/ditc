@@ -1,0 +1,15 @@
+{
+  "name": "drivers-dot-full-pro-v4-8-dark-on-demand",
+  "version": "4.8.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.4",
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
+    "unzipper": "^0.11.6"
+  }
+}

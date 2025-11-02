@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><!--Drak Informations--!> </title>
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --bg:#0b0f12;
+    --panel:#131920;
+    --muted:#1c2430;
+    --text:#e5eef7;
+    --soft:#9fb3c8;
+    --accent:#3aa6ff;
+    --ok:#35d49a;
+    --fail:#ff6b6b;
+    --warn:#ffd166;
+    --chip:#1a2430;
+    --border:#263243;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg); color:var(--text); font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; margin:0; padding:0}
+  header{padding:20px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); background:linear-gradient(180deg, #0c1217, #0a0e12)}
+  .title{font-weight:700; letter-spacing:.4px}
+  .badge{background:var(--chip); color:var(--soft); padding:6px 10px; border-radius:999px; font-size:12px}
+  main{max-width:1100px; margin:30px auto; padding:0 16px}
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 6px 20px #00000066}
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+  select, input, button{background:#0e141a; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:10px 12px}
+  button{background:linear-gradient(180deg,#182330,#111924); cursor:pointer; transition:.2s all; border-color:#304258}
+  button:hover{transform:translateY(-1px); box-shadow:0 6px 16px #0008}
+  .btn-ok{border-color:#1e6b55}
+  .btn-ok:hover{background:#124436}
+  .btn-outline{background:#0e141a}
+  .status{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid var(--border); font-size:12px}
+  .dot{width:10px; height:10px; border-radius:50%}
+  .ok{background:var(--ok)} .fail{background:var(--fail)} .idle{background:#8899aa}
+  table{width:100%; border-collapse:collapse; margin-top:12px; font-size:14px}
+  th,td{border-bottom:1px solid var(--border); padding:10px 8px; text-align:left}
+  th{position:sticky; top:0; background:#131a22}
+  .pagination{display:flex; gap:8px; align-items:center; justify-content:flex-end; padding-top:10px}
+  .pagination button{padding:6px 10px}
+  .tools{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .overlay{position:fixed; inset:0; background:#000a; display:none; align-items:center; justify-content:center; z-index:9999}
+  .overlay.show{display:flex}
+  .loader{display:flex; flex-direction:column; align-items:center; gap:12px; padding:20px 28px; background:#0d141c; border:1px solid #223040; border-radius:16px}
+  .pulse{width:14px; height:14px; border-radius:50%; background:var(--accent); animation:pulse 1s infinite ease-in-out}
+  @keyframes pulse{0%{transform:scale(.8); opacity:.7} 50%{transform:scale(1.3); opacity:1} 100%{transform:scale(.8); opacity:.7}}
+  .muted{color:var(--soft)}
+  .tableWrap{max-height:65vh; overflow:auto; border:1px solid var(--border); border-radius:12px}
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+ 
+}
+
+</style>
+</head>
+<body>
+<header>
+ <span class="badge">• Websolution-MN • Payed Version</span> <span class="badge">• Websolution-MN • Payed Version</span> <span class="badge">• Websolution-MN </span>
+  <div class="title"><I>Dark informations for</i><B> trucking cmpanies</i></div>
+  <span class="badge">• Websolution-MN • Payed Version</span> <span class="badge">• Websolution-MN • Payed Version</span><span class="badge">• Websolution-MN </span>
+</header>
+<main>
+  <div class="card" id="controls">
+    <div class="row" style="gap:10px; margin-bottom:10px">
+      <label>Dataset:</label>
+      <select id="datasetSelect"></select>
+      <button id="btnUpdate" class="btn-ok">⟳ Update Selected</button>
+      <button id="btnRefresh" class="btn-outline">🔃 Refresh Data</button>
+      <input id="search" placeholder="Search (full‑text)…" style="flex:1">
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+<div class="status" id="status"></div>
+<div id="columnFilters" class="row" style="margin-top:10px; flex-wrap:wrap;"></div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="tableWrap">
+      <table>
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button id="prev">Prev</button>
+      <span class="muted" id="pageInfo"></span>
+      <button id="next">Next</button>
+    </div>
+  </div>
+  
+
+
+  
+</main>
+<span class="badge">• Payed Version• Websolution-MN • Payed Version • Websolution-MN • Payed Version • Websolution-MN • Payed Version • Websolution-MN • Payed Version • Websolution-MN • Payed Version • Websolution-MN • Payed Version • Websolution-MN • Payed Version</span>
+
+<div class="overlay" id="overlay">
+  <div class="loader">
+    <div class="pulse"></div>
+    <div class="muted" id="overlayText">Fetching data… please wait</div>
+  </div>
+</div>
+<!-- 🔒 LOCKED ENTRY POPUP -->
+<div id="accessPopup" style="
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex; align-items:center; justify-content:center;
+  z-index:10000; backdrop-filter:blur(6px);
+">
+  <div style="
+    background:#111822;
+    border:1px solid #283647;
+    border-radius:18px;
+    padding:40px 30px;
+    width:350px;
+    text-align:center;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+  ">
+    <h2 style="margin:0; color:#3aa6ff;">🔐 Restricted Access</h2>
+    <p style="margin-top:10px; color:#9fb3c8; font-size:14px;">
+      Enter access password to unlock the system.
+    </p>
+    <input type="password" id="popupPass" placeholder="Enter password..."
+      style="margin-top:20px; width:100%; padding:12px 10px; border-radius:10px;
+      border:1px solid #2b3a4b; background:#0c1218; color:white; text-align:center; font-size:15px;">
+    <button id="popupSubmit"
+      style="margin-top:18px; width:100%; padding:12px; background:#3aa6ff; border:none;
+      border-radius:10px; color:white; font-weight:600; font-size:15px; cursor:pointer;">
+      Unlock Access
+    </button>
+	<BR><BR>
+	
+	 <div style="margin-top:10px;">
+    <button id="btnTakePassword" style="background:#25D366; border:none; padding:10px 18px; color:white; border-radius:10px; cursor:pointer;">
+      💬 Take Password
+    </button>
+  </div>
+  <BR>
+  <p style="margin-top:8px; color:#9fb3c8;">Contact us: <b>websolution.mn@gmail.com</b></p>
+    <div style="margin-top:20px; display:flex; justify-content:center; gap:10px;">
+      <div class="pulseDot"></div>
+      <div class="pulseDot"></div>
+      <div class="pulseDot"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pulseDot {
+  width:12px; height:12px; border-radius:50%;
+  background:#3aa6ff;
+  animation:pulseAnim 1.2s infinite ease-in-out;
+}
+.pulseDot:nth-child(2){animation-delay:.2s}
+.pulseDot:nth-child(3){animation-delay:.4s}
+@keyframes pulseAnim {
+  0%,80%,100%{transform:scale(.7); opacity:.6}
+  40%{transform:scale(1.4); opacity:1}
+}
+</style>
+
+
+<script>
+const overlay = document.getElementById('overlay');
+const overTxt = document.getElementById('overlayText');
+function showOverlay(msg){ overlay.classList.add('show'); }
+function hideOverlay(){ overlay.classList.remove('show'); }
+
+// Покажи loader веднаш штом се вчита страницата
+document.addEventListener('DOMContentLoaded', ()=> showOverlay('Loading...'));
+
+let datasets=[], page=1, pageSize=20, currentFile='', headers=[];
+
+async function api(url, opts){
+  const res = await fetch(url, Object.assign({headers:{'Content-Type':'application/json'}}, opts||{}));
+  if(!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+function renderStatus(results){
+  const s=document.getElementById('status'); s.innerHTML='';
+  (results||[]).forEach(r=>{
+    const el=document.createElement('div'); el.className='chip';
+    const dot=document.createElement('div'); dot.className='dot ' + (r.ok?'ok':'fail');
+    el.append(dot, document.createTextNode(`${r.key}: ${r.ok?'OK':'FAIL'} — ${r.note||''}`));
+    s.append(el);
+  });
+}
+
+async function loadDatasets(){
+  datasets = await api('/api/datasets');
+  const sel = document.getElementById('datasetSelect'); sel.innerHTML='';
+  datasets.forEach(d=>{
+    const o=document.createElement('option'); o.value=d.key; o.textContent=d.label; sel.append(o);
+  });
+  currentFile = (datasets[0]?.key||'') + '.csv';
+}
+
+async function refreshData(){
+  if(!currentFile){ await loadDatasets(); }
+  const q = document.getElementById('search').value || '';
+  const data = await api(`/api/data?file=${encodeURIComponent(currentFile)}&page=${page}&pageSize=${pageSize}&q=${encodeURIComponent(q)}`);
+  headers = data.headers || [];
+window._rows = data.rows || [];
+renderColumnFilters(headers);
+renderFilteredTable();
+
+  const tb=document.getElementById('tbody'); tb.innerHTML='';
+  if((data.rows||[]).length===0){
+    const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=99; td.textContent='No rows. Click "Update Selected" first or change dataset.'; tr.append(td); tb.append(tr);
+  }else{
+    data.rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      headers.forEach(h=>{
+        const td=document.createElement('td'); td.textContent = r[h]||''; tr.append(td);
+      });
+      tb.append(tr);
+    });
+  }
+  const th=document.getElementById('thead'); th.innerHTML='';
+  if(headers.length){ const tr=document.createElement('tr'); headers.forEach(h=>{ const thd=document.createElement('th'); thd.textContent=h; tr.append(thd); }); th.append(tr); }
+  document.getElementById('pageInfo').textContent = `Page ${data.page} / ${data.totalPages} • ${data.totalMatched} rows`;
+}
+function renderColumnFilters(headers) {
+  const container = document.getElementById('columnFilters');
+  container.innerHTML = '';
+  if (!headers || !headers.length) return;
+
+  headers.forEach(h => {
+    const label = document.createElement('label');
+    label.style.marginRight = '10px';
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '6px';
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = true;
+    cb.value = h;
+    cb.onchange = () => renderFilteredTable();
+
+    label.append(cb, document.createTextNode(h));
+    container.append(label);
+  });
+}
+function renderFilteredTable() {
+  const selectedCols = [...document.querySelectorAll('#columnFilters input:checked')].map(cb => cb.value);
+  const tb = document.getElementById('tbody');
+  const th = document.getElementById('thead');
+  tb.innerHTML = '';
+  th.innerHTML = '';
+
+  if (!window._rows || !window._rows.length) return;
+
+  // Header
+  const trh = document.createElement('tr');
+  selectedCols.forEach(h => {
+    const thd = document.createElement('th');
+    thd.textContent = h;
+    trh.append(thd);
+  });
+  th.append(trh);
+
+  // Колку редови да се прикажат
+  const visibleRows = window.tableUnlocked ? window._rows : window._rows.slice(0, 4);
+
+  // Прикажи редови
+  visibleRows.forEach(r => {
+    const tr = document.createElement('tr');
+    selectedCols.forEach(h => {
+      const td = document.createElement('td');
+      td.textContent = r[h] || '';
+      tr.append(td);
+    });
+    tb.append(tr);
+  });
+
+  // Ако е заклучено — додади ред со копчињата
+  if (!window.tableUnlocked) {
+    const trExtra = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = selectedCols.length;
+    td.style.textAlign = 'center';
+    td.innerHTML = `
+      <div style="margin-top:10px;">
+        <button id="btnReadMore" style="padding:12px 20px; border-radius:10px; font-size:16px; background:#3aa6ff; color:white; border:none; cursor:pointer;">
+          🔓 Read More...
+        </button>
+      </div>
+      <div style="margin-top:10px;">
+        <button id="btnTakePassword" style="background:#25D366; border:none; padding:10px 18px; color:white; border-radius:10px; cursor:pointer;">
+          💬 Take Password
+        </button>
+      </div>
+      <p style="margin-top:8px; color:#9fb3c8;">Contact us: <b>websolution.mn@gmail.com</b></p>
+    `;
+    trExtra.append(td);
+    tb.append(trExtra);
+
+    // Поврзи ги копчињата со функциите
+    document.getElementById('btnReadMore').addEventListener('click', ()=>{
+      const pass = prompt('Enter access password:');
+      if (pass === 'DarkWebForTruckingCOPMPANIES13120905') {
+        window.tableUnlocked = true;
+        alert('✅ Access granted! Full data unlocked.');
+        renderFilteredTable();
+      } else {
+        alert('❌ Wrong password!');
+      }
+    });
+
+    document.getElementById('btnTakePassword').addEventListener('click', ()=>{
+      window.open('https://wa.me/38978395246', '_blank');
+    });
+  }
+}
+
+
+
+document.getElementById('datasetSelect').addEventListener('change', (e)=>{
+  const key=e.target.value;
+  currentFile = key + '.csv';
+  page=1; refreshData();
+});
+document.getElementById('search').addEventListener('input', ()=>{ page=1; refreshData(); });
+document.getElementById('prev').addEventListener('click', ()=>{ if(page>1){ page--; refreshData(); } });
+document.getElementById('next').addEventListener('click', ()=>{ page++; refreshData(); });
+
+document.getElementById('btnUpdate').addEventListener('click', async ()=>{
+  try{
+    showOverlay('Fetching data… please wait');
+    const key=document.getElementById('datasetSelect').value;
+    const r=await api('/api/download-selected', {method:'POST', body:JSON.stringify({keys:[key]})});
+    renderStatus(r.results);
+    currentFile = key + '.csv';
+    page=1;
+    await refreshData();
+  }catch(e){ alert('Update failed: ' + e.message); }
+  finally{ hideOverlay(); }
+});
+
+document.getElementById('btnRefresh').addEventListener('click', ()=>{ refreshData(); });
+
+document.getElementById('btnCsv').addEventListener('click', async ()=>{
+  const q = document.getElementById('search').value || '';
+  const url = `/api/data?file=${encodeURIComponent(currentFile)}&page=1&pageSize=20000&q=${encodeURIComponent(q)}`;
+  const data = await api(url);
+  const rows=data.rows||[];
+  if(!rows.length){ alert('Nothing to export.'); return; }
+  const hs=data.headers||Object.keys(rows[0]||{});
+  const esc = s => ('"'+ String(s).replace(/"/g,'""') + '"');
+  const csv=[hs.map(esc).join(',')].concat(rows.map(r=>hs.map(h=>esc(r[h]||'')).join(','))).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (currentFile||'data.csv').replace(/\.csv$/,'') + '_export.csv';
+  a.click();
+});
+
+(async ()=>{
+  showOverlay('Loading app…');
+  await loadDatasets();
+  currentFile = (datasets[0]?.key||'') + '.csv';
+  await refreshData();
+  hideOverlay(); // кога ќе заврши сè, сокриј го loader-от
+})();
+
+</script>
+<script>
+// 🚫 Безбедносни блокови (остави ги како се)
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (
+    e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'c' || e.key === 'x' || e.key === 'p') ||
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))
+  ) {
+    e.preventDefault();
+    alert('Action disabled.');
+  }
+});
+window.addEventListener('keyup', e => {
+  if (e.key === 'PrintScreen') {
+    navigator.clipboard.writeText('');
+    alert('Screenshots are disabled on this page.');
+  }
+});
+document.body.style.userSelect = "none";
+document.body.style.webkitUserSelect = "none";
+document.body.style.msUserSelect = "none";
+
+
+// --- POPUP LOGIC ---
+window.addEventListener('load', ()=>{
+  const popup = document.getElementById('accessPopup');
+  const passInput = document.getElementById('popupPass');
+  const submitBtn = document.getElementById('popupSubmit');
+  const takePassBtn = document.getElementById('btnTakePassword');
+
+  // 🚫 Оневозможи скролање и интеракција со останатото
+  document.body.style.overflow = "hidden";
+  document.getElementById('overlay').style.pointerEvents = "none";
+
+  // WhatsApp копче
+  takePassBtn.addEventListener('click', ()=>{
+    window.open('https://wa.me/38978395246', '_blank');
+  });
+
+  function unlockAccess(){
+    popup.style.opacity = '0';
+    popup.style.transition = 'opacity 0.6s ease';
+    setTimeout(()=>{
+      popup.style.display = 'none';
+      document.body.style.overflow = "auto";
+      document.getElementById('overlay').style.pointerEvents = "auto";
+      alert('✅ Access granted. Welcome inside.');
+    }, 500);
+  }
+
+  submitBtn.addEventListener('click', ()=>{
+    const entered = passInput.value.trim();
+    if(entered === 'DarkWebForTruckingCOPMPANIES13120905'){
+      unlockAccess();
+    } else {
+      passInput.value = '';
+      passInput.placeholder = '❌ Wrong password';
+      passInput.style.borderColor = '#ff6b6b';
+      passInput.focus();
+    }
+  });
+
+  passInput.addEventListener('keypress', e=>{
+    if(e.key==='Enter'){ submitBtn.click(); }
+  });
+});
+</script>
+
+
+</body>
+</html>

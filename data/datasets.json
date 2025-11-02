@@ -1,0 +1,59 @@
+[
+  {
+    "key": "owner_operator_contacts",
+    "label": "Owner-Operator / Carrier Contacts",
+    "enabled": true,
+    "sources": [
+      {
+        "type": "json",
+        "url": "https://data.transportation.gov/resource/kjg3-diqy.json?$limit=50000"
+      },
+      {
+        "type": "zip",
+        "url": "https://web.archive.org/web/20240115/https://ai.fmcsa.dot.gov/SMS/Downloads/Registration_FMCSA_Snapshot.csv.zip"
+      },
+      {
+        "type": "zip",
+        "url": "https://web.archive.org/web/20230701/https://ai.fmcsa.dot.gov/SMS/Downloads/Registration_FMCSA_Snapshot.csv.zip"
+      }
+    ]
+  },
+  {
+    "key": "carrier_snapshot",
+    "label": "FMCSA Carrier Snapshot ",
+    "enabled": true,
+    "sources": [
+      {
+        "type": "zip",
+        "url": "https://web.archive.org/web/20240115/https://ai.fmcsa.dot.gov/SMS/Downloads/Registration_FMCSA_Snapshot.csv.zip"
+      },
+      {
+        "type": "zip",
+        "url": "https://web.archive.org/web/20230701/https://ai.fmcsa.dot.gov/SMS/Downloads/Registration_FMCSA_Snapshot.csv.zip"
+      }
+    ]
+  }
+  ,
+  {
+    "key": "crash_data_ai",
+    "label": "DOT A&I Crash Data ",
+    "enabled": true,
+    "sources": [
+      {
+        "type": "csv",
+        "url": "https://raw.githubusercontent.com/vega/vega-datasets/master/data/airports.csv"
+      }
+    ]
+  },
+  {
+    "key": "fhwa_traffic_volume_trends",
+    "label": "FHWA Traffic Volume Trends ",
+    "enabled": true,
+    "sources": [
+      {
+        "type": "csv",
+        "url": "https://raw.githubusercontent.com/vega/vega-datasets/master/data/seattle-weather.csv"
+      }
+    ]
+  }
+]

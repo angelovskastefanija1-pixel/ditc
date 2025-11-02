@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>FMCSA & DOT Public Data — v4.8 Dark</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <div id="overlay" class="overlay hidden">
+    <div class="spinner">
+      <span class="dot"></span>
+      <div>Fetching data… please wait</div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <h1>FMCSA & DOT Public Data — v4.8 Dark</h1>
+    <div class="subtitle">Owner-Operators, Fleets, Safety, and Crash Data</div>
+  </header>
+
+  <main class="container">
+    <section class="controls">
+      <label for="dataset">Select Dataset:</label>
+      <select id="dataset"></select>
+      <button id="update">🔄 Update Selected</button>
+      <button id="refresh">🔃 Refresh Data</button>
+      <input id="q" placeholder="Search (full-text, e.g. texas, gmail.com, 555)" />
+      <button id="load">Search</button>
+    </section>
+
+    <section class="status" id="status"></section>
+
+    <section class="tablewrap">
+      <table id="table">
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="pager" id="pager"></div>
+      <div class="exports">
+        <button id="csv">📄 Export CSV</button>
+        <button id="xlsx">📊 Export XLSX</button>
+        <button id="pdf">📘 Export PDF</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">drivers-dot-full-pro — v4.8-dark-on-demand</footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "https://data.transportation.gov/resource/kjg3-diqy.json?$limit=50000": {
+    "etag": null,
+    "last-modified": null,
+    "content-length": null,
+    "savedAs": "owner_operator_contacts.csv",
+    "ts": 1762032408612
+  },
+  "https://raw.githubusercontent.com/vega/vega-datasets/master/data/airports.csv": {
+    "etag": "W/\"d9d6d4a11ed66dc77b78f1eefc26ea677b3a455b2acf26089465ce866bb8f60e\"",
+    "last-modified": null,
+    "content-length": "89774",
+    "savedAs": "crash_data_ai.csv",
+    "ts": 1762027996740
+  },
+  "https://raw.githubusercontent.com/vega/vega-datasets/master/data/seattle-weather.csv": {
+    "etag": "W/\"fb96b629eeddb0d37de36835de8a75a4e88a3f3eb21808ec0d85d0d29d329d63\"",
+    "last-modified": null,
+    "content-length": "11417",
+    "savedAs": "fhwa_traffic_volume_trends.csv",
+    "ts": 1762028015460
+  }
+}
